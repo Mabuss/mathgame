@@ -1,7 +1,6 @@
 <?php
 session_start();
-
-$_SESSION["isAuth"]=0;	
+session_destroy();
 
 header('Location: login.php');
 ?>

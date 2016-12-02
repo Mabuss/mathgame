@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+$err="";
 
 if (!$_SESSION["isAuth"]==1){
 header('Location: login.php');
@@ -16,11 +16,19 @@ extract($_POST);
 
 if (isset($answer)) {
 	if ($isAdd) {
-		if ($answer==$a+$b)
+		if ($answer==$a+$b) {
 			$_SESSION["score"]++;
+			$err='<p style="color:green;">You were correct!</p>';
+		} else {
+			$err='<p style="color:red;">You were wrong!</p>';
+		}
 	} else {
-		if ($answer==$a-$b)
-			$_SESSION["score"]++;
+		if ($answer==$a-$b) {
+			$_SESSION["score"]++;	
+			$err='<p style="color:green;">You were correct!</p>';
+		} else {
+			$err='<p style="color:red;">You were wrong!</p>';
+		}
 	}
 	$_SESSION["total"]++;
 }
@@ -53,7 +61,7 @@ $isAdd = rand(0,1);
 	?>
 	<div class="clearfix"></div>
 	<div class="col-sm-4 col-sm-offset-4">
-	<input class="form-control" type="text" name="answer">
+	<input class="form-control" type="text" name="answer" placeholder="Enter answer here">
 	</div>
 	
 	<input type="hidden" name="a" value="<?php echo $a; ?>">
@@ -67,10 +75,15 @@ $isAdd = rand(0,1);
 	<div>
 	
 	<hr/>
-
 	<?php
 	echo 'Score: ' . (float) $_SESSION["score"] . '/' . (float) $_SESSION["total"];
+	echo '<br/>';
+	echo $err;
+	
 	?>
+	
+	
+	
 </form>
 <?php include("include/footer.php"); ?>
 
