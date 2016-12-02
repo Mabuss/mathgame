@@ -1,8 +1,7 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-session_unset();
+session_start();
 
-header('Location: index.php');
+$_SESSION["isAuth"]=0;	
+
+header('Location: login.php');
 ?>

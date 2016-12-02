@@ -1,40 +1,77 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+session_start();
+
+
+if (!$_SESSION["isAuth"]==1){
+header('Location: login.php');
 }
 
+if (!isset($_SESSION["score"]))
+	$_SESSION["score"] = 0;
 
+if (!isset($_SESSION["total"]))
+	$_SESSION["total"] = 0;
 
 extract($_POST);
 
-if ($name=="a@a.a"&&$pass=="aaa"){
-	include("mathgame.php");
-	$_SESSION["isAuth"]=1;	
-	die();
+if (isset($answer)) {
+	if ($isAdd) {
+		if ($answer==$a+$b)
+			$_SESSION["score"]++;
+	} else {
+		if ($answer==$a-$b)
+			$_SESSION["score"]++;
+	}
+	$_SESSION["total"]++;
 }
+
+$a = rand(0,20);
+$b = rand(0,20);
+$isAdd = rand(0,1);
 ?>
 
-<?php include("include/header.php"); echo $name;
-?>
-<h1>Math Game</h1>
+<?php include("include/header.php"); ?>
 
-<form class="row form-horizontal" action=index.php method="post">
+<div class="row">
+	<h1 class="col-xs-offset-2 col-xs-8">Math Game</h1>
+	<a class="btn btn-default col-xs-2" href="logout.php">Logout</a>
+</div>
 
-	<div class="form-group">
-		<label class="control-label col-sm-2" for="name">Username:</label>
-		<div class="col-sm-4">
-			<input class="form-control" placeholder="Enter your username" id="name" type="text" name="name" size="30"/>
-		</div>
+
+<form class="row form-horizontal" action="index.php" method="post">
+	<?php 
+	echo $a;
+	?>
+	<?php 
+	if ($isAdd)
+		echo ' + ';
+	else 
+		echo ' - ';
+	?>
+	<?php 
+	echo $b; 
+	?>
+	<div class="clearfix"></div>
+	<div class="col-sm-4 col-sm-offset-4">
+	<input class="form-control" type="text" name="answer">
 	</div>
 	
+	<input type="hidden" name="a" value="<?php echo $a; ?>">
+	<input type="hidden" name="b" value="<?php echo $b; ?>">
+	<input type="hidden" name="isAdd" value="<?php echo $isAdd; ?>">
+	
+	<div class="clearfix"></div>
+	
 	<div class="form-group">
-		<label class="control-label col-sm-2" for="name">Password:</label>
-		<div class="col-sm-4">
-			<input class="form-control" placeholder="Enter your password" id="pass" type="text" name="pass" size="30"/>
-		</div>
-	</div>
+	<input class="btn btn-primary " type="submit" value="Submit">
+	<div>
+	
+	<hr/>
 
-	<input class="btn btn-primary" type="submit" value="Login">
+	<?php
+	echo 'Score: ' . (float) $_SESSION["score"] . '/' . (float) $_SESSION["total"];
+	?>
 </form>
-
 <?php include("include/footer.php"); ?>
+
+
